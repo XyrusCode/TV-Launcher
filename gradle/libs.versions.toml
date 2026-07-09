@@ -1,6 +1,9 @@
 [versions]
+# Kotlin must be >= the version the Jellyfin SDK 1.8.6 was compiled with (2.2 metadata),
+# otherwise its .kotlin_module files are rejected ("incompatible version of Kotlin").
+# The Compose compiler plugin tracks the Kotlin version, so it moves in lockstep.
 agp = "8.7.3"
-kotlin = "2.0.21"
+kotlin = "2.2.21"
 coreKtx = "1.15.0"
 lifecycle = "2.8.7"
 activityCompose = "1.9.3"
