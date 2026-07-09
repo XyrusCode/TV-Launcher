@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Xyrus TV</string>
+
+    <!-- Home -->
+    <string name="row_continue_watching">Continue Watching</string>
+    <string name="row_next_up">Next Up</string>
+    <string name="row_recently_added">Recently Added</string>
+    <string name="row_libraries">My Media</string>
+    <string name="row_apps">Apps</string>
+    <string name="settings">Settings</string>
+
+    <!-- Setup -->
+    <string name="setup_title">Connect to Jellyfin</string>
+    <string name="setup_server">Server address</string>
+    <string name="setup_server_hint">http://192.168.1.10:8096</string>
+    <string name="setup_username">Username</string>
+    <string name="setup_password">Password</string>
+    <string name="setup_connect">Connect</string>
+    <string name="setup_skip">Skip for now</string>
+    <string name="setup_connecting">Connecting…</string>
+    <string name="setup_error">Could not connect. Check the address and credentials.</string>
+
+    <!-- Jellyfin state -->
+    <string name="jellyfin_not_connected">Jellyfin not connected</string>
+    <string name="jellyfin_connect_prompt">Connect a Jellyfin server to see your library here.</string>
+    <string name="jellyfin_disconnect">Disconnect Jellyfin</string>
+
+    <!-- Errors -->
+    <string name="jellyfin_app_missing">Jellyfin app is not installed.</string>
+    <string name="app_launch_failed">Couldn\'t open this app.</string>
+</resources>

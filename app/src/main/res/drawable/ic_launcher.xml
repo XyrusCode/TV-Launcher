@@ -1,0 +1,16 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#0B0E14"
+        android:pathData="M0,0h108v108h-108z" />
+    <!-- Play triangle inside a rounded panel -->
+    <path
+        android:fillColor="#5AC8FA"
+        android:pathData="M30,28h48a6,6 0,0 1,6 6v40a6,6 0,0 1,-6 6h-48a6,6 0,0 1,-6 -6v-40a6,6 0,0 1,6 -6z" />
+    <path
+        android:fillColor="#0B0E14"
+        android:pathData="M48,42l22,12l-22,12z" />
+</vector>

@@ -1,0 +1,23 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp"
+    android:height="180dp"
+    android:viewportWidth="320"
+    android:viewportHeight="180">
+    <path
+        android:fillColor="#0B0E14"
+        android:pathData="M0,0h320v180h-320z" />
+    <!-- Rounded play panel -->
+    <path
+        android:fillColor="#5AC8FA"
+        android:pathData="M40,60h64a8,8 0,0 1,8 8v44a8,8 0,0 1,-8 8h-64a8,8 0,0 1,-8 -8v-44a8,8 0,0 1,8 -8z" />
+    <path
+        android:fillColor="#0B0E14"
+        android:pathData="M64,78l30,16l-30,16z" />
+    <!-- Wordmark bars -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M140,74h150v10h-150z" />
+    <path
+        android:fillColor="#8A93A6"
+        android:pathData="M140,96h110v8h-110z" />
+</vector>
