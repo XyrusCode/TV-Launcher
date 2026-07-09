@@ -33,8 +33,11 @@
             android:theme="@style/Theme.TVLauncher"
             tools:ignore="LockedOrientationActivity">
 
-            <!-- Registers this activity as a HOME (launcher) replacement. -->
-            <intent-filter>
+            <!-- Registers this activity as a HOME (launcher) replacement. High priority so it
+                 can outrank Google TV's stock launcher (priority 2) and the setup wizard
+                 (priority 1) during HOME resolution — if the framework honors it for a
+                 third-party app. -->
+            <intent-filter android:priority="1000">
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
