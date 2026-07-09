@@ -4,11 +4,13 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import org.jellyfin.sdk.api.client.ApiClient
+import org.jellyfin.sdk.api.client.extensions.authenticateUserByName
 import org.jellyfin.sdk.api.client.extensions.imageApi
-import org.jellyfin.sdk.api.client.extensions.libraryApi
-import org.jellyfin.sdk.api.client.extensions.showApi
+import org.jellyfin.sdk.api.client.extensions.itemsApi
+import org.jellyfin.sdk.api.client.extensions.tvShowsApi
 import org.jellyfin.sdk.api.client.extensions.userApi
-import org.jellyfin.sdk.api.client.extensions.userViewApi
+import org.jellyfin.sdk.api.client.extensions.userLibraryApi
+import org.jellyfin.sdk.api.client.extensions.userViewsApi
 import org.jellyfin.sdk.model.api.BaseItemDto
 import org.jellyfin.sdk.model.api.ImageType
 import xyruscode.tv.launcher.data.model.JellyfinHome
@@ -44,10 +46,10 @@ class JellyfinRepository(
     suspend fun loadHome(session: JellyfinSession): JellyfinHome = coroutineScope {
         val api = clientProvider.createApi(session.serverUrl, session.accessToken)
 
-        val resume = async { safeItems { api.libraryApi.getResumeItems(limit = 20).content.items } }
-        val nextUp = async { safeItems { api.showApi.getNextUp(limit = 20).content.items } }
-        val latest = async { safeItems { api.libraryApi.getLatestMedia(limit = 20).content } }
-        val views = async { safeItems { api.userViewApi.getUserViews(includeHidden = false).content.items } }
+        val resume = async { safeItems { api.itemsApi.getResumeItems(limit = 20).content.items } }
+        val nextUp = async { safeItems { api.tvShowsApi.getNextUp(limit = 20).content.items } }
+        val latest = async { safeItems { api.userLibraryApi.getLatestMedia(limit = 20).content } }
+        val views = async { safeItems { api.userViewsApi.getUserViews(includeHidden = false).content.items } }
 
         JellyfinHome(
             continueWatching = resume.await().toMediaItems(api),
