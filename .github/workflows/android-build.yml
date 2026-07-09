@@ -1,0 +1,56 @@
+name: Android Build
+
+on:
+  push:
+    branches: ["**"]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write # needed for the release step on tags
+
+jobs:
+  build:
+    name: Build release APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Assemble release APK
+        run: ./gradlew assembleRelease --stacktrace
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tv-launcher-release-apks
+          path: app/build/outputs/apk/release/*.apk
+          if-no-files-found: error
+
+      - name: Attach APK to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: app/build/outputs/apk/release/*.apk
+          body: |
+            Xyrus TV — a native Google TV launcher & Jellyfin media hub for the Walmart onn box.
+
+            Surfaces sideloaded apps that Google TV's home hides, and puts your Jellyfin
+            library (Continue Watching, Next Up, Recently Added, Libraries) up front.
+
+            Install `app-release.apk`, then set it as the default launcher — see the README
+            for the one-time `adb` command Google TV needs. Signed with the project's stable
+            key, so updates install straight over a previous install.

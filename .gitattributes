@@ -1,0 +1,12 @@
+# Keep shell scripts LF so they run on Linux CI runners.
+*.sh text eol=lf
+gradlew text eol=lf
+gradlew.bat text eol=crlf
+
+# Treat binaries as binary (never line-ending munged) — a corrupted keystore breaks signing.
+*.jar binary
+*.jks binary
+*.keystore binary
+*.png binary
+*.jpg binary
+*.jpeg binary
