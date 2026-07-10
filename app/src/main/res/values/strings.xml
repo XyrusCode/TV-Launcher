@@ -21,6 +21,19 @@
     <string name="setup_connecting">Connecting…</string>
     <string name="setup_error">Could not connect. Check the address and credentials.</string>
 
+    <!-- Discovery + Quick Connect -->
+    <string name="setup_searching">Searching your network for Jellyfin…</string>
+    <string name="setup_pick_server">Choose your Jellyfin server</string>
+    <string name="setup_no_servers">No servers found on your network.</string>
+    <string name="setup_manual_entry">Enter address manually</string>
+    <string name="setup_search_again">Search again</string>
+    <string name="setup_continue">Continue</string>
+    <string name="setup_back">Back</string>
+    <string name="setup_qc_title">Quick Connect</string>
+    <string name="setup_qc_instructions">On your phone or computer, open Jellyfin → your profile → Quick Connect, then enter this code:</string>
+    <string name="setup_qc_waiting">Waiting for approval…</string>
+    <string name="setup_use_password">Use password instead</string>
+
     <!-- Jellyfin state -->
     <string name="jellyfin_not_connected">Jellyfin not connected</string>
     <string name="jellyfin_connect_prompt">Connect a Jellyfin server to see your library here.</string>

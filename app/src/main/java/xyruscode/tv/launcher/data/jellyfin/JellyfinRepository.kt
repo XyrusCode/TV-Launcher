@@ -1,21 +1,28 @@
 package xyruscode.tv.launcher.data.jellyfin
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.withContext
 import org.jellyfin.sdk.api.client.ApiClient
 import org.jellyfin.sdk.api.client.extensions.authenticateUserByName
+import org.jellyfin.sdk.api.client.extensions.authenticateWithQuickConnect
 import org.jellyfin.sdk.api.client.extensions.imageApi
 import org.jellyfin.sdk.api.client.extensions.itemsApi
+import org.jellyfin.sdk.api.client.extensions.quickConnectApi
 import org.jellyfin.sdk.api.client.extensions.tvShowsApi
 import org.jellyfin.sdk.api.client.extensions.userApi
 import org.jellyfin.sdk.api.client.extensions.userLibraryApi
 import org.jellyfin.sdk.api.client.extensions.userViewsApi
 import org.jellyfin.sdk.model.api.BaseItemDto
 import org.jellyfin.sdk.model.api.ImageType
+import xyruscode.tv.launcher.data.model.DiscoveredServer
 import xyruscode.tv.launcher.data.model.JellyfinHome
 import xyruscode.tv.launcher.data.model.JellyfinSession
 import xyruscode.tv.launcher.data.model.MediaItem
+import xyruscode.tv.launcher.data.model.QuickConnectStart
 import xyruscode.tv.launcher.data.prefs.SettingsDataStore
 
 /**
@@ -41,6 +48,45 @@ class JellyfinRepository(
             val userId = requireNotNull(auth.user?.id) { "Server returned no user" }.toString()
             settings.saveSession(JellyfinSession(url, token, userId))
         }
+
+    /**
+     * Broadcasts on the LAN and returns the Jellyfin servers that answer within the SDK's
+     * discovery timeout. Deduped by address; empty (never throws) if none respond.
+     */
+    suspend fun discoverServers(): List<DiscoveredServer> = withContext(Dispatchers.IO) {
+        runCatching {
+            clientProvider.discoverLocalServers()
+                .toList()
+                .map { DiscoveredServer(name = it.name, address = it.address) }
+                .distinctBy { normalizeUrl(it.address) }
+        }.getOrDefault(emptyList())
+    }
+
+    /**
+     * Initiates Quick Connect on [rawUrl]. Returns the code to show the user plus the secret to
+     * poll. Fails when the server has Quick Connect disabled — the UI falls back to password login.
+     */
+    suspend fun startQuickConnect(rawUrl: String): Result<QuickConnectStart> = runCatching {
+        val api = clientProvider.createApi(normalizeUrl(rawUrl))
+        val result = api.quickConnectApi.initiateQuickConnect().content
+        QuickConnectStart(code = result.code, secret = result.secret)
+    }
+
+    /** True once the user has approved the Quick Connect request from another Jellyfin client. */
+    suspend fun pollQuickConnect(rawUrl: String, secret: String): Result<Boolean> = runCatching {
+        val api = clientProvider.createApi(normalizeUrl(rawUrl))
+        api.quickConnectApi.getQuickConnectState(secret).content.authenticated
+    }
+
+    /** Exchanges an approved Quick Connect secret for a token and persists the session. */
+    suspend fun finishQuickConnect(rawUrl: String, secret: String): Result<Unit> = runCatching {
+        val url = normalizeUrl(rawUrl)
+        val api = clientProvider.createApi(url)
+        val auth = api.userApi.authenticateWithQuickConnect(secret = secret).content
+        val token = requireNotNull(auth.accessToken) { "Server returned no access token" }
+        val userId = requireNotNull(auth.user?.id) { "Server returned no user" }.toString()
+        settings.saveSession(JellyfinSession(url, token, userId))
+    }
 
     /** Loads the four home rows in parallel; a failing row degrades to empty rather than crashing. */
     suspend fun loadHome(session: JellyfinSession): JellyfinHome = coroutineScope {
