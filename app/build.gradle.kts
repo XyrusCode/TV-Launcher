@@ -12,8 +12,8 @@ android {
         applicationId = "xyruscode.tv.launcher"
         minSdk = 24
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 2
+        versionName = "1.1.0"
     }
 
     // One shared, committed signing key (identity: xyruscode.tv.launcher) used by every build so

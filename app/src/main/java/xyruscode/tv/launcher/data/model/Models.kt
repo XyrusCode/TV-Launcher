@@ -40,3 +40,15 @@ data class JellyfinSession(
     val accessToken: String,
     val userId: String,
 )
+
+/** A Jellyfin server found on the local network via UDP auto-discovery. */
+data class DiscoveredServer(
+    val name: String,
+    val address: String,
+)
+
+/** An initiated Quick Connect request: [code] is shown to the user, [secret] is polled. */
+data class QuickConnectStart(
+    val code: String,
+    val secret: String,
+)
